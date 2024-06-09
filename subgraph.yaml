@@ -8,7 +8,7 @@ dataSources:
     name: TaikoL1
     network: mainnet
     source:
-      address: "0xB9E1E58bcF33B79CcfF99c298963546a6c334388"
+      address: "0x06a9Ab27c7e2255df1815E6CC0168d7755Feb19a"
       abi: TaikoL1
       startBlock: 19960128
     mapping:
@@ -19,21 +19,15 @@ dataSources:
         - AdminChanged
         - BeaconUpgraded
         - BlockProposed
-        - BlockProposed1
         - BlockVerified
-        - BlockVerified1
         - Initialized
         - OwnershipTransferStarted
         - OwnershipTransferred
         - Paused
         - ProvingPaused
-        - ProvingPaused1
         - StateVariablesUpdated
-        - StateVariablesUpdated1
         - TransitionContested
-        - TransitionContested1
         - TransitionProved
-        - TransitionProved1
         - Unpaused
         - Upgraded
       abis:
@@ -46,12 +40,8 @@ dataSources:
           handler: handleBeaconUpgraded
         - event: BlockProposed(indexed uint256,indexed address,uint96,(bytes32,bytes32,bytes32,bytes32,bytes32,address,uint64,uint32,uint64,uint64,uint16,bool,bytes32,address),(address,uint96,uint64)[])
           handler: handleBlockProposed
-        - event: BlockProposed(indexed uint256,indexed address,uint96,(bytes32,bytes32,bytes32,bytes32,bytes32,address,uint64,uint32,uint64,uint64,uint16,bool,bytes32,address),(address,uint96,uint64)[])
-          handler: handleBlockProposed1
         - event: BlockVerified(indexed uint256,indexed address,bytes32,bytes32,uint16)
           handler: handleBlockVerified
-        - event: BlockVerified(indexed uint256,indexed address,bytes32,bytes32,uint16)
-          handler: handleBlockVerified1
         - event: Initialized(uint8)
           handler: handleInitialized
         - event: OwnershipTransferStarted(indexed address,indexed address)
@@ -62,20 +52,12 @@ dataSources:
           handler: handlePaused
         - event: ProvingPaused(bool)
           handler: handleProvingPaused
-        - event: ProvingPaused(bool)
-          handler: handleProvingPaused1
         - event: StateVariablesUpdated((uint64,uint64,bool,uint8,uint16,uint32,uint64))
           handler: handleStateVariablesUpdated
-        - event: StateVariablesUpdated((uint64,uint64,bool,uint8,uint16,uint32,uint64))
-          handler: handleStateVariablesUpdated1
         - event: TransitionContested(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
           handler: handleTransitionContested
-        - event: TransitionContested(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
-          handler: handleTransitionContested1
         - event: TransitionProved(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
           handler: handleTransitionProved
-        - event: TransitionProved(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
-          handler: handleTransitionProved1
         - event: Unpaused(address)
           handler: handleUnpaused
         - event: Upgraded(indexed address)
