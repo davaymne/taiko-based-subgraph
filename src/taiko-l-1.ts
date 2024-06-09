@@ -289,7 +289,7 @@ export function handleTransitionProved(event: TransitionProvedEvent): void {
   entity.blockIdL2 = event.params.blockId
   entity.tran_parentHash = event.params.tran.parentHash
   entity.tran_blockHash = event.params.tran.blockHash
-  entity.tran_signalRoot = event.params.tran.signalRoot
+  entity.tran_stateRoot = event.params.tran.stateRoot
   entity.tran_graffiti = event.params.tran.graffiti
   entity.validityBond = event.params.validityBond
   entity.tier = event.params.tier

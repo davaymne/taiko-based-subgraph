@@ -113,7 +113,7 @@ type TransitionProved @entity(immutable: true) {
 
   tran_parentHash: Bytes! # bytes32
   tran_blockHash: Bytes! # bytes32
-  tran_signalRoot: Bytes! # bytes32
+  tran_stateRoot: Bytes! # bytes32
   tran_graffiti: Bytes! # bytes32
   validityBond: BigInt! # uint96
   tier: Int! # uint16
