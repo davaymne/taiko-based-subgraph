@@ -120,10 +120,10 @@ export function handleBlockVerified(event: BlockVerifiedEvent): void {
   entity.txFee = entity.txGasPrice * entity.txGasUsed
   
   entity.blockIdL2 = event.params.blockId
-  entity.assignedProver = event.params.assignedProver
+  entity.assignedProver = event.params.prover
   entity.prover = event.params.prover
   entity.blockHash = event.params.blockHash
-  entity.statelRoot = event.params.signalRoot
+  entity.stateRoot = event.params.stateRoot
   entity.tier = event.params.tier
 
   entity.blockNumberL1 = event.block.number

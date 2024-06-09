@@ -138,7 +138,7 @@ type BlockVerified @entity(immutable: true) {
   assignedProver: Bytes! # address
   prover: Bytes! # address
   blockHash: Bytes! # bytes32
-  statelRoot: Bytes! # bytes32
+  stateRoot: Bytes! # bytes32
   tier: Int! # uint16
   
   blockNumberL1: BigInt!
