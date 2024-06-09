@@ -1,0 +1,83 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TaikoL1
+    network: mainnet
+    source:
+      address: "0xB9E1E58bcF33B79CcfF99c298963546a6c334388"
+      abi: TaikoL1
+      startBlock: 19960128
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - BlockProposed
+        - BlockProposed1
+        - BlockVerified
+        - BlockVerified1
+        - Initialized
+        - OwnershipTransferStarted
+        - OwnershipTransferred
+        - Paused
+        - ProvingPaused
+        - ProvingPaused1
+        - StateVariablesUpdated
+        - StateVariablesUpdated1
+        - TransitionContested
+        - TransitionContested1
+        - TransitionProved
+        - TransitionProved1
+        - Unpaused
+        - Upgraded
+      abis:
+        - name: TaikoL1
+          file: ./abis/TaikoL1.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: BlockProposed(indexed uint256,indexed address,uint96,(bytes32,bytes32,bytes32,bytes32,bytes32,address,uint64,uint32,uint64,uint64,uint16,bool,bytes32,address),(address,uint96,uint64)[])
+          handler: handleBlockProposed
+        - event: BlockProposed(indexed uint256,indexed address,uint96,(bytes32,bytes32,bytes32,bytes32,bytes32,address,uint64,uint32,uint64,uint64,uint16,bool,bytes32,address),(address,uint96,uint64)[])
+          handler: handleBlockProposed1
+        - event: BlockVerified(indexed uint256,indexed address,bytes32,bytes32,uint16)
+          handler: handleBlockVerified
+        - event: BlockVerified(indexed uint256,indexed address,bytes32,bytes32,uint16)
+          handler: handleBlockVerified1
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnershipTransferStarted(indexed address,indexed address)
+          handler: handleOwnershipTransferStarted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: ProvingPaused(bool)
+          handler: handleProvingPaused
+        - event: ProvingPaused(bool)
+          handler: handleProvingPaused1
+        - event: StateVariablesUpdated((uint64,uint64,bool,uint8,uint16,uint32,uint64))
+          handler: handleStateVariablesUpdated
+        - event: StateVariablesUpdated((uint64,uint64,bool,uint8,uint16,uint32,uint64))
+          handler: handleStateVariablesUpdated1
+        - event: TransitionContested(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
+          handler: handleTransitionContested
+        - event: TransitionContested(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
+          handler: handleTransitionContested1
+        - event: TransitionProved(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
+          handler: handleTransitionProved
+        - event: TransitionProved(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
+          handler: handleTransitionProved1
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/taiko-l-1.ts
