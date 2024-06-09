@@ -20,7 +20,7 @@ services:
       postgres_db: graph-node
       ipfs: "ipfs:5001"
         #ethereum: "mainnet:http://host.docker.internal:8545"
-      ethereum: "mainnet:http://200.69.14.230:8545"
+      ethereum: "mainnet:http://x.x.x.x:8545"
       GRAPH_LOG: info
   ipfs:
     image: ipfs/kubo:v0.17.0
