@@ -40,8 +40,10 @@ dataSources:
           handler: handleBeaconUpgraded
         - event: BlockProposed(indexed uint256,indexed address,uint96,(bytes32,bytes32,bytes32,bytes32,bytes32,address,uint64,uint32,uint64,uint64,uint16,bool,bytes32,address),(address,uint96,uint64)[])
           handler: handleBlockProposed
+          receipt: true
         - event: BlockVerified(indexed uint256,indexed address,bytes32,bytes32,uint16)
           handler: handleBlockVerified
+          receipt: true
         - event: Initialized(uint8)
           handler: handleInitialized
         - event: OwnershipTransferStarted(indexed address,indexed address)
@@ -56,8 +58,10 @@ dataSources:
           handler: handleStateVariablesUpdated
         - event: TransitionContested(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
           handler: handleTransitionContested
+          receipt: true
         - event: TransitionProved(indexed uint256,(bytes32,bytes32,bytes32,bytes32),address,uint96,uint16)
           handler: handleTransitionProved
+          receipt: true
         - event: Unpaused(address)
           handler: handleUnpaused
         - event: Upgraded(indexed address)

@@ -1,3 +1,6 @@
+import { BigInt, log } from "@graphprotocol/graph-ts";
+import { createOrLoadBlock, createOrLoadAccount, createOrLoadProposer, createOrLoadProver, createOrLoadContester } from './utils'
+
 import {
   AdminChanged as AdminChangedEvent,
   BeaconUpgraded as BeaconUpgradedEvent,
@@ -62,7 +65,19 @@ export function handleBlockProposed(event: BlockProposedEvent): void {
   let entity = new BlockProposed(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.blockId = event.params.blockId
+  entity.txGasUsed = event.receipt ? event.receipt!.gasUsed : new BigInt(0);
+  entity.txGasPrice = event.transaction.gasPrice
+  entity.txFee = entity.txGasPrice * entity.txGasUsed
+
+  entity.proposerId = event.transaction.from
+  
+  let proposer = createOrLoadProposer(event.transaction.from.toHexString())
+  proposer.totalBlockProposed = proposer.totalBlockProposed + 1
+  proposer.save()
+
+  entity.proposer = proposer.id
+
+  entity.blockIdL2 = event.params.blockId
   entity.assignedProver = event.params.assignedProver
   entity.livenessBond = event.params.livenessBond
   entity.meta_l1Hash = event.params.meta.l1Hash
@@ -75,15 +90,24 @@ export function handleBlockProposed(event: BlockProposedEvent): void {
   entity.meta_gasLimit = event.params.meta.gasLimit
   entity.meta_timestamp = event.params.meta.timestamp
   entity.meta_l1Height = event.params.meta.l1Height
+  entity.meta_txListByteOffset = event.params.meta.txListByteOffset
+  entity.meta_txListByteSize = event.params.meta.txListByteSize
   entity.meta_minTier = event.params.meta.minTier
   entity.meta_blobUsed = event.params.meta.blobUsed
   entity.meta_parentMetaHash = event.params.meta.parentMetaHash
-  entity.meta_sender = event.params.meta.sender
+  // entity.depositsProcessed = event.params.depositsProcessed
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumberL1 = event.block.number
+  entity.blockTimestampL1 = event.block.timestamp
+  entity.transactionHashL1 = event.transaction.hash
+  
+  let blockL2 = createOrLoadBlock(event.params.blockId)
+  blockL2.status = 'PROPOSED'
+  blockL2.blockTimestamp = event.block.timestamp
+  blockL2.save()
 
+  entity.blockL2 = blockL2.id
+  
   entity.save()
 }
 
@@ -91,15 +115,27 @@ export function handleBlockVerified(event: BlockVerifiedEvent): void {
   let entity = new BlockVerified(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.blockId = event.params.blockId
+  entity.txGasUsed = event.receipt ? event.receipt!.gasUsed : new BigInt(0);
+  entity.txGasPrice = event.transaction.gasPrice
+  entity.txFee = entity.txGasPrice * entity.txGasUsed
+  
+  entity.blockIdL2 = event.params.blockId
+  entity.assignedProver = event.params.assignedProver
   entity.prover = event.params.prover
   entity.blockHash = event.params.blockHash
-  entity.stateRoot = event.params.stateRoot
+  entity.statelRoot = event.params.signalRoot
   entity.tier = event.params.tier
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumberL1 = event.block.number
+  entity.blockTimestampL1 = event.block.timestamp
+  entity.transactionHashL1 = event.transaction.hash
+
+  let blockL2 = createOrLoadBlock(event.params.blockId)
+  blockL2.status = 'VERIFIED'
+  blockL2.blockHash = event.params.blockHash
+  blockL2.save()
+
+  entity.blockL2 = blockL2.id
 
   entity.save()
 }
@@ -203,18 +239,34 @@ export function handleTransitionContested(
   let entity = new TransitionContested(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.blockId = event.params.blockId
+  entity.txGasUsed = event.receipt ? event.receipt!.gasUsed : new BigInt(0);
+  entity.txGasPrice = event.transaction.gasPrice
+  entity.txFee = entity.txGasPrice * entity.txGasUsed
+
+  entity.blockIdL2 = event.params.blockId
   entity.tran_parentHash = event.params.tran.parentHash
   entity.tran_blockHash = event.params.tran.blockHash
-  entity.tran_stateRoot = event.params.tran.stateRoot
+  entity.tran_signalRoot = event.params.tran.signalRoot
   entity.tran_graffiti = event.params.tran.graffiti
-  entity.contester = event.params.contester
+
+  entity.contesterId = event.params.contester
+  let contester = createOrLoadContester(event.params.contester.toHexString())
+  contester.totalBlockContested = contester.totalBlockContested + 1
+  contester.save()
+  entity.contester = contester.id
+
   entity.contestBond = event.params.contestBond
   entity.tier = event.params.tier
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumberL1 = event.block.number
+  entity.blockTimestampL1 = event.block.timestamp
+  entity.transactionHashL1 = event.transaction.hash
+
+  let blockL2 = createOrLoadBlock(event.params.blockId)
+  blockL2.status = 'CONTESTED'
+  blockL2.save()
+
+  entity.blockL2 = blockL2.id
 
   entity.save()
 }
@@ -223,18 +275,33 @@ export function handleTransitionProved(event: TransitionProvedEvent): void {
   let entity = new TransitionProved(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.blockId = event.params.blockId
+  entity.txGasUsed = event.receipt ? event.receipt!.gasUsed : new BigInt(0);
+  entity.txGasPrice = event.transaction.gasPrice
+  entity.txFee = entity.txGasPrice * entity.txGasUsed
+
+  entity.proverId = event.params.prover
+  let prover = createOrLoadProver(event.params.prover.toHexString())
+  prover.totalBlockProved = prover.totalBlockProved + 1
+  prover.save()
+
+  entity.prover = prover.id
+
+  entity.blockIdL2 = event.params.blockId
   entity.tran_parentHash = event.params.tran.parentHash
   entity.tran_blockHash = event.params.tran.blockHash
-  entity.tran_stateRoot = event.params.tran.stateRoot
+  entity.tran_signalRoot = event.params.tran.signalRoot
   entity.tran_graffiti = event.params.tran.graffiti
-  entity.prover = event.params.prover
   entity.validityBond = event.params.validityBond
   entity.tier = event.params.tier
+  entity.blockNumberL1 = event.block.number
+  entity.blockTimestampL1 = event.block.timestamp
+  entity.transactionHashL1 = event.transaction.hash
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  let blockL2 = createOrLoadBlock(event.params.blockId)
+  blockL2.status = 'PROVED'
+  blockL2.save()
+
+  entity.blockL2 = blockL2.id
 
   entity.save()
 }
