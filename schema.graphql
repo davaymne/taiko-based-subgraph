@@ -34,7 +34,6 @@ type BlockProposed @entity(immutable: true) {
   meta_blobUsed: Boolean! # bool
   meta_parentMetaHash: Bytes! # bytes32
   meta_sender: Bytes! # address
-  depositsProcessed: [Bytes!]! # tuple[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
