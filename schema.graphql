@@ -71,8 +71,6 @@ type BlockProposed @entity(immutable: true) {
   meta_gasLimit: BigInt! # uint32
   meta_timestamp: BigInt! # uint64
   meta_l1Height: BigInt! # uint64
-  meta_txListByteOffset: Int! # uint24
-  meta_txListByteSize: Int! # uint24
   meta_minTier: Int! # uint16
   meta_blobUsed: Boolean! # bool
   meta_parentMetaHash: Bytes! # bytes32

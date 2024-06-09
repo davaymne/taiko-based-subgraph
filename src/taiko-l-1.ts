@@ -90,8 +90,6 @@ export function handleBlockProposed(event: BlockProposedEvent): void {
   entity.meta_gasLimit = event.params.meta.gasLimit
   entity.meta_timestamp = event.params.meta.timestamp
   entity.meta_l1Height = event.params.meta.l1Height
-  entity.meta_txListByteOffset = event.params.meta.txListByteOffset
-  entity.meta_txListByteSize = event.params.meta.txListByteSize
   entity.meta_minTier = event.params.meta.minTier
   entity.meta_blobUsed = event.params.meta.blobUsed
   entity.meta_parentMetaHash = event.params.meta.parentMetaHash
