@@ -79,7 +79,6 @@ export function handleBlockProposed(event: BlockProposedEvent): void {
   entity.meta_blobUsed = event.params.meta.blobUsed
   entity.meta_parentMetaHash = event.params.meta.parentMetaHash
   entity.meta_sender = event.params.meta.sender
-  entity.depositsProcessed = event.params.depositsProcessed
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
